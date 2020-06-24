@@ -73,7 +73,7 @@ class System:
         if self.get_total_neurons() == 0:
             self._logger.warning("There are no units assigned to this rank")
 
-        run_time = (stop_time - self._clock) * spaghetti_timestep
+        run_time = (stop_time - self._clock) * simulation_timestep
 
         self._logger.notification("Simulation triggered (run time = %.2fs) ..."
                                   % run_time)
@@ -105,7 +105,7 @@ class System:
                     and (self._clock % self.progress_bar_update_interval == 0
                          or self._clock == stop_time - 1)):
                 fraction = ((self._clock - start_time + 1) *
-                            spaghetti_timestep / total_time)
+                            simulation_timestep / total_time)
                 _progress_bar(fraction)
 
             # Evolve neuron groups
@@ -129,7 +129,7 @@ class System:
 
             # Sync nodes
             if (self._mpi_size > 1
-                    and self._clock % spaghetti_mindelay == 0):
+                    and self._clock % simulation_mindelay == 0):
                 self._sync()
 
         elapsed = time.process_time() - t_sim_start
@@ -191,15 +191,15 @@ class System:
             return False
 
         start_time = self._clock
-        stop_time = self._clock + int(simulation_time / spaghetti_timestep)
+        stop_time = self._clock + int(simulation_time / simulation_timestep)
 
         return self._run(start_time, stop_time, simulation_time, checking)
 
     def run_chunk(self, chunk_time, interval_start, interval_end,
                   checking=False):
         """TODO"""
-        start_time = int(interval_start / spaghetti_timestep)
-        stop_time = self._clock + int(chunk_time / spaghetti_timestep)
+        start_time = int(interval_start / simulation_timestep)
+        stop_time = self._clock + int(chunk_time / simulation_timestep)
         simulation_time = interval_end - interval_start
 
         return self._run(start_time, stop_time, simulation_time, checking)
@@ -210,7 +210,7 @@ class System:
 
     def get_time(self):
         """TODO"""
-        return self._clock * spaghetti_timestep
+        return self._clock * simulation_timestep
 
     def get_total_neurons(self):
         """TODO"""
