@@ -1,0 +1,67 @@
+# Configuration file for sim_rewiring_ex12.py
+---
+master_seed: 10
+simulation_time: "n/a"  # Is set in script
+sampling_interval_weights: 0.3
+
+input_parameters:
+    num_inputs: 320
+    pattern_delay: 0.2
+    pattern_duration: 0.3
+    num_assemblies: 8
+    assembly_size: 40
+    rate: 35.0
+    rate_bg: 1.0
+    num_patterns_per_assembly: 250
+    num_test_patterns_per_assembly: 2
+
+connection_parameters:
+    n_syn_start: 20
+    n_syn_max: 20
+    w_max: 8.0
+    w_ini_min: 4.0
+    w_ini_max: 8.0
+    theta_ini: -0.5
+    theta_min: -2.0
+    T: 0.3
+    eta: 0.002
+    lambd: 10.0
+    gamma: 0.2
+    grad_sigmoid_clip: 8.0
+    A: 0.0
+    B: -3.2
+    stdp_th: -67.0
+    stdp_active: True
+    scale_w: 0.55
+    scale_prior: 1.0
+    gaussian_prior_active: True
+    gaussian_prior_mean: 8.0
+    gaussian_prior_thr: 7.0
+    gaussian_prior_std_high: 1.0
+    gaussian_prior_std_low: 32.0
+    scale_likelihood: 1.5
+    tau_pre: 20e-3
+    tau_post: 20e-3
+
+neuron_parameters:
+    num_branches: 12
+    branch_parameters:
+        v_thr: -55.0
+        v_rest: -70.0
+        r_mem: 40e6
+        c_mem: 250e-12
+        tau_syn: 2e-3
+        tau_sod: 4e-3
+        v_pla: -30.0
+        a_sod_max: 5.0
+        scale_pla: 40e-3
+        plateau_duration_min: 20e-3
+        plateau_duration_max: 300e-3
+    soma_parameters:
+        v_thr: -55.0
+        v_rest: -70.0
+        r_l: 2.0
+        r_mem: 40e6
+        c_mem: 250e-12
+        tau_syn: 2e-3
+        refractory_period: 5e-3
