@@ -6,7 +6,7 @@ Rewiring ](https://www.frontiersin.org/articles/10.3389/fncom.2020.00057)".
 You need Python to run this code. We tested it on Python version 3.7. Additional dependencies are listed in
 [environment.yml](environment.yml). If you use [Conda](https://docs.conda.io/en/latest/), run
 
-```console
+```bash
 conda env create --file=environment.yml
 ```
 
