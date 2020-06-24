@@ -4,7 +4,7 @@
 import numpy as np
 
 
-class Trace():
+class Trace:
     """TODO"""
 
     def __init__(self, size):

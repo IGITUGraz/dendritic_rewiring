@@ -4,7 +4,7 @@
 import numpy as np
 
 
-class Trace2D():
+class Trace2D:
     """TODO"""
 
     def __init__(self, size):

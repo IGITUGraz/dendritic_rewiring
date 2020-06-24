@@ -53,7 +53,7 @@ class SpikingGroup(metaclass=abc.ABCMeta):
 
         frac = self._calculate_rank_size(0) / simulation_min_distributed_size
         if mode == NodeDistributionMode.AUTO:
-            if frac >= 0 and frac < 1:
+            if 0 <= frac < 1:
                 mode = NodeDistributionMode.BLOCKLOCK
             else:
                 mode = NodeDistributionMode.ROUNDROBIN
@@ -83,8 +83,7 @@ class SpikingGroup(metaclass=abc.ABCMeta):
         else:
             comrank = self._mpi_rank
 
-        if (comrank >= self._locked_rank
-                and comrank < self._locked_rank + self._locked_range):
+        if self._locked_rank <= comrank < self._locked_rank + self._locked_range:
             if comrank - self._locked_rank >= self.size % self._locked_range:
                 return self.size // self._locked_range
             else:
@@ -100,7 +99,7 @@ class SpikingGroup(metaclass=abc.ABCMeta):
             self._locked_range = 1
             core.logger.notification(
                 "%s :: Group will run on single rank only (RANKLOCK)"
-                % (self.group_name))
+                % self.group_name)
         else:
             free_ranks = self._mpi_size - SpikingGroup.last_locked_rank
             self._locked_range = int(rank_fraction * self._mpi_size + 0.5)
@@ -112,7 +111,7 @@ class SpikingGroup(metaclass=abc.ABCMeta):
                 core.logger.msg(
                     "%s :: Not enough free ranks for RANGELOCK. Starting to "
                     "fill at zero again ..."
-                    % (self.group_name))
+                    % self.group_name)
 
         rank = self._mpi_rank
         self.evolve_locally = ((rank >= self._locked_rank) and

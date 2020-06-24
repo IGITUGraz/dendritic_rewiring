@@ -21,7 +21,7 @@ class Monitor(Device):
             self.outfile = open(self.filename, 'wb')
         except OSError:
             core.logger.error("Can't open output file %s."
-                              % (self.filename))
+                              % self.filename)
             raise
 
     def flush(self):

@@ -6,13 +6,28 @@ import time
 import numpy as np
 from mpi4py import MPI
 
-from spaghetti.logger import LogMessageType
-from spaghetti.spaghetti_definitions import (spaghetti_mindelay,
-                                             spaghetti_timestep)
-from spaghetti.sync_buffer import SyncBuffer
+from core.logger import LogMessageType
+from core.core_definitions import (simulation_mindelay, simulation_timestep)
+from core.sync_buffer import SyncBuffer
 
 
-class System():
+def _progress_bar(fraction):
+    """TODO"""
+    bar = ""
+    division = 4
+    percent = 100 * fraction
+    for i in range(100//division):
+        if i < percent // division:
+            bar += '='
+        elif i == percent // division:
+            bar += '>'
+        else:
+            bar += ' '
+
+    print('[%s] %d%%\r' % (bar, percent), end='')
+
+
+class System:
     """TODO"""
 
     def __init__(self, mpicomm, logger, directory, simulation_name, quiet):
@@ -41,7 +56,7 @@ class System():
 
         logger.notification("Starting Spaghetti Kernel")
         logger.msg("Simulation timestep is set to %.2es"
-                   % (spaghetti_timestep), LogMessageType.SETTINGS)
+                   % simulation_timestep, LogMessageType.SETTINGS)
 
         if self._mpi_size > 0 and (self._mpi_size & (self._mpi_size - 1)):
             self._logger.msg("The number of processes is not a power of "
@@ -53,21 +68,6 @@ class System():
         """TODO"""
         self._clock += 1
 
-    def _progress_bar(self, fraction, clock):
-        """TODO"""
-        bar = ""
-        division = 4
-        percent = 100 * fraction
-        for i in range(100//division):
-            if i < percent // division:
-                bar += '='
-            elif i == percent // division:
-                bar += '>'
-            else:
-                bar += ' '
-
-        print('[%s] %d%%\r' % (bar, percent), end='')
-
     def _run(self, start_time, stop_time, total_time, checking=False):
         """TODO"""
         if self.get_total_neurons() == 0:
@@ -76,7 +76,7 @@ class System():
         run_time = (stop_time - self._clock) * spaghetti_timestep
 
         self._logger.notification("Simulation triggered (run time = %.2fs) ..."
-                                  % (run_time))
+                                  % run_time)
 
         if self._clock == 0:
             self._logger.msg("On this rank: neurons %d, synapses %d"
@@ -106,7 +106,7 @@ class System():
                          or self._clock == stop_time - 1)):
                 fraction = ((self._clock - start_time + 1) *
                             spaghetti_timestep / total_time)
-                self._progress_bar(fraction, self._clock)
+                _progress_bar(fraction)
 
             # Evolve neuron groups
             self._evolve()
@@ -134,7 +134,7 @@ class System():
 
         elapsed = time.process_time() - t_sim_start
         self._logger.notification("Simulation finished. Elapsed wall time "
-                                  "%.2fs" % (elapsed))
+                                  "%.2fs" % elapsed)
 
         return True
 
@@ -159,8 +159,7 @@ class System():
         """TODO"""
         for i, checker in enumerate(self._checkers):
             if not checker.execute():
-                self._logger.warning("Checker %d triggered abort of simulation"
-                                     % (i))
+                self._logger.warning("Checker %d triggered abort of simulation" % i)
                 return False
 
         return True
@@ -265,7 +264,7 @@ class System():
         seed_multiplier = 257
         self.rank_master_seed = seed_multiplier * seed * (self._mpi_rank + 1)
         self._logger.msg("Seeding this rank with master seed %d" %
-                         (self.rank_master_seed), LogMessageType.NOTIFICATION)
+                         self.rank_master_seed, LogMessageType.NOTIFICATION)
         self.rng = np.random.RandomState(seed=self.rank_master_seed)
 
     def get_seed(self):

@@ -37,7 +37,7 @@ class McLifGroup(McNeuronGroup):
         else:
             return 0
 
-    class Soma():
+    class Soma:
         """TODO"""
 
         def __init__(self, size, branch, nrn, params={}):
@@ -123,7 +123,7 @@ class McLifGroup(McNeuronGroup):
                     self.mem[i] = self.v_rest
                     self.ref[i] -= 1
 
-    class Branch():
+    class Branch:
         """TODO"""
 
         def __init__(self, size, nrn, params={}):

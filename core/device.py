@@ -3,7 +3,7 @@
 """TODO"""
 
 
-class Device():
+class Device:
     """TODO"""
     unique_id_count = 0
 

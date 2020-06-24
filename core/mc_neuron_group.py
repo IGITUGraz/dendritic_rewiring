@@ -14,3 +14,6 @@ class McNeuronGroup(SpikingGroup):
         if self.evolve_locally:
             self.num_compartments = m
             self.group_name = "McNeuronGroup"
+
+    def evolve(self):
+        pass

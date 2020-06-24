@@ -43,7 +43,7 @@ class VoltageMonitor(Monitor):
             if self.uid < self.source.get_post_size():
                 core.kernel.register_device(self)
                 self.outfile.write("# Recording from neuron %d\n".encode()
-                                   % (self.gid))
+                                   % self.gid)
 
     def execute(self):
         """TODO"""
@@ -72,7 +72,7 @@ class VoltageMonitor(Monitor):
         """TODO"""
         if duration < 0:
             core.logger.warning("Warning: Negative stop times not"
-                                " supported -- ingoring.")
+                                " supported -- ignoring.")
         else:
             self.stop_time = (core.kernel.get_clock() +
                               duration / simulation_timestep)

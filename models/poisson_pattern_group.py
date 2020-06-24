@@ -54,7 +54,7 @@ class PoissonPatternGroup(SpikingGroup):
             self.pattern_end = clock + self.timesteps_delay + \
                 self.timesteps_pattern
 
-        if clock >= self.pattern_start and clock < self.pattern_end:
+        if self.pattern_start <= clock < self.pattern_end:
             for assembly, idx_inactive_neurons in zip(
                     self.active_assemblies, self.idc_inactive_neurons):
 

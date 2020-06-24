@@ -22,7 +22,7 @@ class LogMessageType(Enum):
             return self.value < other.value
 
 
-class Logger():
+class Logger:
     """TODO"""
 
     def __init__(self, filename, rank, console_out=LogMessageType.PROGRESS,
@@ -43,7 +43,7 @@ class Logger():
             print("Can't open logger output file.")
             raise
 
-        self.notification("Logger started on Rank %d" % (self.rank))
+        self.notification("Logger started on Rank %d" % self.rank)
 
     def msg(self, message, msg_type=LogMessageType.NOTIFICATION,
             global_msg=False):

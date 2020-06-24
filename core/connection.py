@@ -4,7 +4,7 @@
 import numpy as np
 
 
-class Connection():
+class Connection:
     """TODO"""
 
     def __init__(self, source, destination, transmitter, name="Connection"):
@@ -48,13 +48,13 @@ class Connection():
         """TODO"""
         self.target_state_vector = target
 
-    def transmitt(self, gid, ammount):
+    def transmit(self, gid, amount):
         """TODO"""
         self.targeted_transmit(self.destination, self.target_state_vector, gid,
-                               ammount)
+                               amount)
 
     def targeted_transmit(self, destination, target_state_vector, gid,
-                          ammount):
+                          amount):
         """TODO"""
         pass
 

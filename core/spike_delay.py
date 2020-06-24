@@ -3,7 +3,7 @@
 """TODO"""
 
 
-class SpikeDelay():
+class SpikeDelay:
     """TODO"""
 
     def __init__(self, delay):
