@@ -2,7 +2,7 @@
 """TODO"""
 
 
-class SyncBuffer():
+class SyncBuffer:
     """TODO"""
 
     def __init__(self, mpicomm):
