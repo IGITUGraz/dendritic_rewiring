@@ -2,6 +2,8 @@
 This is the simulation code used in the paper "[Emergence of Stable Synaptic Clusters on Dendrites Through Synaptic
 Rewiring ](https://www.frontiersin.org/articles/10.3389/fncom.2020.00057)".
 
+![Schema neuron model and plasticity/rewiring](https://i.imgur.com/qezv4Z6.png)
+
 ## Setup
 You need Python to run this code. We tested it on Python version 3.7. Additional dependencies are listed in
 [environment.yml](environment.yml). If you use [Conda](https://docs.conda.io/en/latest/), run
