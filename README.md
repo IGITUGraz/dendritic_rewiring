@@ -60,4 +60,5 @@ TODO
 TODO
 
 ## References
-TODO
+
+* Limbacher, T., & Legenstein, R. (2020). Emergence of Stable Synaptic Clusters on Dendrites Through Synaptic Rewiring. Frontiers in Computational Neuroscience, 14, 57.
