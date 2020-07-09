@@ -15,17 +15,19 @@ conda env create --file=environment.yml
 to install the required packages and their dependencies.
 
 ## Usage
-TODO
+TODO (sections correspond to the sections of the paper).
+Raw simulation data will be stored in the folder [results](results).
 
 ### Synaptic clustering through rewiring
-TODO
+Here we show that synaptic rewiring dynamics give rise to (a) clustering of functionally related inputs onto dendritic compartments, and (b) segregation of different assemblies onto different branches. This leads to segregated assembly-specific activation of dendritic branches. To reproduce the raw results reportet in the paper, run `python sim_rewiring_ex1.py` (default parameters will be parsed from [config_rewiring_ex1.yaml](config_rewiring_ex1.yaml).
 
 ### STDP increases the capacity of neurons to store assembly patterns
-TODO
-Simulations with alternative plasticity rule
+With the plasticity dynamics considered above, since plasticity depends solely on synaptic inputs and local dendritic potentials, all branches are adapted independently without taking the activity of other branches into account. This implies that synaptic patterns at different branches can become correlated in the sense that projections from one assembly cluster on two or more branches of the neuron. Here we show that a simple additional STDP mechanism indirectly introduces competition between dendritic branches. This increases the capacity of the neuron in terms of the number of assemblies that are stored on dendrites. To reproduce the raw results reportet in the paper, run `python sim_rewiring_ex2.py` (default parameters will be parsed from [config_rewiring_ex2.yaml](config_rewiring_ex2.yaml).
+
+TODO: Simulations with alternative plasticity rule
 
 ### Rewiring protects stored information
-TODO
+One effect of the synaptic clustering observed in our simulations was that activation of different input assemblies led to dendritic spikes in different dendritic branches. 
 
 ### Synaptic clustering depends on input statistics
 TODO
@@ -58,5 +60,4 @@ TODO
 TODO
 
 ## References
-
-* Limbacher, T., & Legenstein, R. (2020). Emergence of Stable Synaptic Clusters on Dendrites Through Synaptic Rewiring. Frontiers in Computational Neuroscience, 14, 57.
+TODO
