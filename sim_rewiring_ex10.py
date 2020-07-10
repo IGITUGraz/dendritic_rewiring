@@ -1,7 +1,17 @@
 #!/usr/bin/env python
-"""Analyze influence of pattern duration and delay duration on clustering (without STDP)."""
+"""This script is meant to analyze the effect of the temperature T on the change in the synaptic weights.
+
+We start with 20 synapses/per branch for each of the 8 assemblies (8 branches have connections to 20 different
+input neurons; the remaining 4 branches are not connected). We set the weights to the maximum and simulate for
+t seconds, where 7 assemblies are active during simulation and 1 assembly only spikes with a background rate
+of 1Hz. We are interessted in the weight change of that one branch that has connections to the assembly that
+is silent during simulation.
+"""
 
 import os
+import time
+
+import numpy as np
 
 from core import core_global as core
 from core.spike_monitor import SpikeMonitor
@@ -21,8 +31,8 @@ def main(args):
     neuron_params = config["neuron_parameters"]
 
     # Directory for simulation results and log files.
-    name = str(1e3 * input_params["pattern_delay"]) + "d" + str(1e3 * input_params["pattern_duration"]) + "p"
-    output_directory = os.path.join("results", "rewiring_ex10", name, str(trial), "data")
+    output_directory = os.path.join("results", "rewiring_ex10", "T" + str(connection_params["T"]),
+                                    time.strftime("%y%m%d_%H%M%S"), str(trial), "data")
 
     # Initialize the simulation environment.
     core.init(directory=output_directory)
@@ -42,6 +52,22 @@ def main(args):
 
     # Connect input to neuron.
     conn = RewiringConnection(inp, neuron, neuron.branch.syn_current, connection_params)
+
+    # Set the weights.
+    size = (neuron_params["num_branches"], input_params["num_inputs"])
+    theta_ini = connection_params["theta_ini"]
+    theta = np.full(size, theta_ini, np.float32)
+
+    assembly_neurons_idc = [i * input_params["assembly_size"] + np.arange(input_params["assembly_size"])
+                            for i in range(input_params["num_assemblies"]+1)]
+
+    for idc, row in zip(assembly_neurons_idc, theta):
+        row[core.kernel.rng.choice(idc, connection_params["n_syn_start"], replace=False)] = \
+            core.kernel.rng.uniform(low=connection_params["w_ini_min"],
+                                    high=connection_params["w_ini_max"],
+                                    size=connection_params["n_syn_start"])
+
+    conn.set_weights(theta)
 
     # Create some monitors which will record the simulation data.
     WeightMatrixMonitor(conn, core.kernel.fn("weights", "dat"),
@@ -71,32 +97,16 @@ def main(args):
 
 
 if __name__ == '__main__':
-    import itertools
     import copy
     from scoop import futures
 
     # Load the configuration file.
     config = utils.load_configuration("config_rewiring_ex10.yaml")
 
-    # Combinations of delays and pattern durations.
-    use_const_active_time = True
-    default_active_time = 600  # seconds
-    d = list(range(0, 250, 50))
-    p = list(range(50, 350, 50))
-
-    def simtime(d, p):
-        return default_active_time + default_active_time / p * d
-
     configs = []
     num_trials = 25
-    combinations = itertools.product(d, p)
-    for pattern_delay, pattern_duration in combinations:
-        for trial in range(num_trials):
-            config["master_seed"] = 10 * (trial + 1)
-            if use_const_active_time:
-                config["simulation_time"] = simtime(pattern_delay, pattern_duration)
-            config["input_parameters"]["pattern_delay"] = 1e-3 * pattern_delay
-            config["input_parameters"]["pattern_duration"] = 1e-3 * pattern_duration
-            configs.append(copy.deepcopy(config))
+    for trial in range(num_trials):
+        config["master_seed"] = 10 * (trial + 1)
+        configs.append(copy.deepcopy(config))
 
-    r = list(futures.map(main, [[trial % 25, config] for trial, config in enumerate(configs)]))
+    r = list(futures.map(main, [[trial, config] for trial, config in enumerate(configs)]))
