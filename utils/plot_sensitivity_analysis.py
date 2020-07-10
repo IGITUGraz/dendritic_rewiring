@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-"""TODO"""
 
 import os
 import subprocess
